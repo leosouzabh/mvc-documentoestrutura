@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../app-es6/constantes/Constants.js"],"names":["Constants","agregador"],"mappings":";;;;;;;;;;IAAaA,S,WAAAA,S;;;;;;;8BAEIC,S,EAAU,CAEtB","file":"Constants.js","sourcesContent":["export class Constants {\r\n    \r\n    static build(agregador){\r\n                \r\n    }\r\n    \r\n}"]}
