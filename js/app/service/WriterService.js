@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -8,26 +8,28 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Elemento = exports.Elemento = function () {
-    function Elemento() {
-        _classCallCheck(this, Elemento);
+var WriterService = exports.WriterService = function () {
+    function WriterService(selector) {
+        _classCallCheck(this, WriterService);
+
+        this._selector = selector;
     }
 
-    _createClass(Elemento, null, [{
-        key: 'tipo',
-        get: function get() {
-            return {
-                TEXTO: 'texto',
-                LISTA: 'lista',
-                DATA: 'data',
-                NUMERO: 'numero',
-                MOEDA: 'moeda',
-                LISTAGEM: 'listagem',
-                AGREGADOR: 'agregador'
-            };
+    _createClass(WriterService, [{
+        key: "wr",
+        value: function wr(html) {
+            this.write(html, null);
+        }
+    }, {
+        key: "wr",
+        value: function wr(html, callback) {
+            $("#" + this._selector).append(html);
+            if (callback) {
+                callback();
+            }
         }
     }]);
 
-    return Elemento;
+    return WriterService;
 }();
-//# sourceMappingURL=Elemento.js.map
+//# sourceMappingURL=WriterService.js.map

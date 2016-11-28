@@ -9,7 +9,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _Builder2 = require('./_Builder');
+var _Builder2 = require('./../_Builder');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -32,9 +32,9 @@ var AgregadorBuilder = exports.AgregadorBuilder = function (_Builder) {
             var id = _get(AgregadorBuilder.prototype.__proto__ || Object.getPrototypeOf(AgregadorBuilder.prototype), 'elemento', this).id;
             var seq = _get(AgregadorBuilder.prototype.__proto__ || Object.getPrototypeOf(AgregadorBuilder.prototype), 'elemento', this).seq;
             var label = _get(AgregadorBuilder.prototype.__proto__ || Object.getPrototypeOf(AgregadorBuilder.prototype), 'elemento', this).label;
-            var idx = dadosItmIndexado ? dadosItmIndexado.posicaoIndice : '-' + idx;
 
-            var idContainerItens = 'container-' + id;
+            var idx = dadosItmIndexado ? dadosItmIndexado.posicaoIndice + '-' + id : '-' + id;
+            var idContainerItens = 'container-' + idx;
 
             var html = '\n            <div class=\'clearfix nivel1 agragador\' id=\'' + id + '\' data-seq=\'' + seq + '\' data-label=\'' + label + '\'>\n                <h3 class=\'titulo-agregador clearfix\'>\n                    <a data-id=\'' + id + '\' class=\'link-agregador\' id=\'link-' + id + '\'>' + label + '</a>\n                </h3>\n                <div class=\'container-sortable\' id=\'' + idContainerItens + '\'></div\n            </div>\n        ';
 

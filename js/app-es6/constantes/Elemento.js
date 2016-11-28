@@ -1,10 +1,13 @@
 export class Elemento {
     
-    static tipo(){
-        console.log('teste');
+    static get tipo(){
         return {
-            TEXTO: 'texto',
-            LISTAGEM: 'listagem',
+            TEXTO  : 'texto',
+            LISTA  : 'lista',
+            DATA   : 'data',
+            NUMERO : 'numero',
+            MOEDA  : 'moeda',
+            LISTAGEM : 'listagem',
             AGREGADOR: 'agregador'
         };
     }

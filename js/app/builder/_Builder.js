@@ -26,6 +26,33 @@ var Builder = exports.Builder = function () {
             return this._elemento.obrigatorio ? "required" : "";
         }
     }, {
+        key: "getIdHtml",
+        value: function getIdHtml(idElemento, dadosItmIndexado) {
+            var retornoId = "id='" + idElemento + "'";
+            if (dadosItmIndexado) {
+                retornoId = "id='" + idElemento + "-" + dadosItmIndexado.posicaoIndice + "-" + dadosItmIndexado.idListagem + "'";
+            }
+            return retornoId;
+        }
+    }, {
+        key: "getReadOnlyHtml",
+        value: function getReadOnlyHtml(readOnly) {
+            var propReadOnly = "";
+            if (readOnly == true) {
+                propReadOnly = "readonly='readonly'";
+            }
+            return propReadOnly;
+        }
+    }, {
+        key: "getDisabledHtml",
+        value: function getDisabledHtml(readOnly) {
+            var propDisabled = "";
+            if (readOnly == true) {
+                propDisabled = "disabled='disabled'";
+            }
+            return propDisabled;
+        }
+    }, {
         key: "elemento",
         get: function get() {
             return this._elemento;
