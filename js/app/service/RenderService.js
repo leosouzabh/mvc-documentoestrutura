@@ -20,12 +20,12 @@ var _MoedaBuilder = require('../builder/html/MoedaBuilder');
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var RenderService = exports.RenderService = function () {
-    function RenderService(item, readOnlyFields, dadosItmIndexado, writeService) {
+    function RenderService(item, readOnlyFields, dadosIndexado, writeService) {
         _classCallCheck(this, RenderService);
 
         this._write = writeService;
         this._readOnlyFields = readOnlyFields;
-        this._dadosItmIndexado = dadosItmIndexado;
+        this._dadosIndexado = dadosIndexado;
         this._item = item;
     }
 
@@ -57,7 +57,7 @@ var RenderService = exports.RenderService = function () {
     }, {
         key: '_doRender',
         value: function _doRender(builder) {
-            return builder.build(this._readOnlyFields, this._dadosItmIndexado);
+            return builder.build(this._readOnlyFields, this._dadosIndexado);
         }
     }]);
 

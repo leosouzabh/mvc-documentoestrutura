@@ -2,38 +2,42 @@ import {Builder} from './../_Builder'
 
 export class ListagemBuilder extends Builder{
     
-    constructor(listagem){
-        super(listagem)
+    constructor(listagem, dadosIndexado){
+        super(listagem);
+        this._dadosIndexado = dadosIndexado;
+            
     }
     
-    build(readOnly, totalItens, dadosItmIndexado){
+    build(readOnly, totalItens){
+        
         
         let id    = super.elemento.id;
         let seq   = super.elemento.seq;
         let label = super.elemento.label;    
         
-        
+        let idBuild = super.getId(id, this._dadosIndexado);
         let idBtnNovo = `btnNovo-${id}`;
         let btnNovoItem = "";
 		if (!readOnly){
-			btnNovoItem = `<a class='btn btn-xs' id='${idBtnNovo}'><i class='fa fa-plus'></i> Novo</a>`;
+			btnNovoItem = `<a class='btn btn-xs btn-novo-item' data-id-listagem='${idBuild}' id='${idBtnNovo}'><i class='fa fa-plus'></i> Novo</a>`;
 		}
         
         let html  =  `
-            <div class='clearfix nivel1 agragador listagem' id='${id}' data-seq='${seq}' data-label='${label}'>
+            <div class='clearfix nivel1 agragador listagem' data-id='${id}' id='${idBuild}' data-seq='${seq}' data-label='${label}'>
             	<h3 class='titulo-agregador clearfix'>
-            		<a data-id='${id}' class='link-agregador' id='link-${id}'><i class='fa fa-bars'></i>${label}</a>
+            		<a data-id='${id}' class='link-agregador'><i class='fa fa-bars'></i>${label}</a>
                     ${btnNovoItem}
             	</h3>
-                <div class='container-sortable' id='container-${id}'>
+                <div class='container-sortable' id='container-${idBuild}'>
                     ${this.buildListaContainerItens(totalItens)}
             	</div>
             </div>            
         `;
         
         return {
+            idListagem: idBuild,
             idBotaoNovo: idBtnNovo,
-            html:html
+            html: html            
         }
         
     }
@@ -48,33 +52,24 @@ export class ListagemBuilder extends Builder{
     }
     
     buildContainerItem(indice){
+        let botaoDelete =  `<a class="btn btn-danger btn-xs btn-outline" id="${this.buildId('btnDelete')}">Excluir</a>`;
         return `
-            <div class="wrap-item" id="wrap-item-${super.elemento.id}-${indice}" >
-                <div class="row cinza campo" style="border-bottom:1px solid #dcdbdb">
-                    <div class="col-md-12">
-                        #${indice+1}
+            <div class="wrap-item" id="${this.buildWrapItemId(indice)}">
+                <div class="row cinza campo header-item">
+                    <div class="col-xs-6 indice-item">#${indice+1}</div>                        
+                    <div class="col-xs-6" style="text-align:right">
+                        ${botaoDelete} 
                     </div>
-                </div>
-                <div class="wrap-componentes" id="wrap-componentes-${super.elemento.id}-${indice}"></div>                    
+                </div>                
             </div>`;
     }
     
-    buildBotaoDelete(indice){
-        let idBtnDelete = `btnDelete-${super.elemento.id}-${indice}`;
-        let html = `
-            <div class="row cinza campo">
-                <div class="col-md-12" style="text-align:right">
-                    <a class="btn btn-danger btn-xs" id="${idBtnDelete}">Excluir</a>
-                </div>
-            </div>`;
-        
-        return {
-            html:html,
-            idBotaoDelete:idBtnDelete,
-            indice:indice
-        }
+    buildWrapItemId(indice){
+        return `${this.buildId('wrapitem')}-${indice}`;
     }
-    
+    buildId(prefixo){
+        return `${prefixo}-${this.getId(super.elemento.id, this._dadosIndexado)}`;
+    }
     
     
 }

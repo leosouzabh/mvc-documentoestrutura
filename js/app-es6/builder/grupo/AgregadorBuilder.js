@@ -6,17 +6,17 @@ export class AgregadorBuilder extends Builder{
         super(agregador)
     }
     
-    build(dadosItmIndexado){
-        let id    = super.elemento.id;
-        let seq   = super.elemento.seq;
-        let label = super.elemento.label;         
+    build(dadosIndexado){
+        let id     = super.elemento.id;
+        let seq    = super.elemento.seq;
+        let label  = super.elemento.label;                 
         
-        let idx   = dadosItmIndexado ? `${dadosItmIndexado.posicaoIndice}-${id}` : `-${id}`;
-        let idContainerItens = `container-${idx}`;
         
+        let idBuild = super.getId(id, dadosIndexado);
+        let idContainerItens = `container-${idBuild}`;
         
         let html  =  `
-            <div class='clearfix nivel1 agragador' id='${id}' data-seq='${seq}' data-label='${label}'>
+            <div class='clearfix nivel1 agragador' id='${idBuild}' data-id='${id}' data-seq='${seq}' data-label='${label}'>
                 <h3 class='titulo-agregador clearfix'>
                     <a data-id='${id}' class='link-agregador' id='link-${id}'>${label}</a>
                 </h3>
@@ -26,7 +26,8 @@ export class AgregadorBuilder extends Builder{
         
         return {
             idContainerItens: idContainerItens,
-            html:html
+            html:html,
+            idBuild:idBuild
         }
         
     }

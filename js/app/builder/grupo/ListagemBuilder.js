@@ -20,29 +20,35 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ListagemBuilder = exports.ListagemBuilder = function (_Builder) {
     _inherits(ListagemBuilder, _Builder);
 
-    function ListagemBuilder(listagem) {
+    function ListagemBuilder(listagem, dadosIndexado) {
         _classCallCheck(this, ListagemBuilder);
 
-        return _possibleConstructorReturn(this, (ListagemBuilder.__proto__ || Object.getPrototypeOf(ListagemBuilder)).call(this, listagem));
+        var _this = _possibleConstructorReturn(this, (ListagemBuilder.__proto__ || Object.getPrototypeOf(ListagemBuilder)).call(this, listagem));
+
+        _this._dadosIndexado = dadosIndexado;
+
+        return _this;
     }
 
     _createClass(ListagemBuilder, [{
         key: "build",
-        value: function build(readOnly, totalItens, dadosItmIndexado) {
+        value: function build(readOnly, totalItens) {
 
             var id = _get(ListagemBuilder.prototype.__proto__ || Object.getPrototypeOf(ListagemBuilder.prototype), "elemento", this).id;
             var seq = _get(ListagemBuilder.prototype.__proto__ || Object.getPrototypeOf(ListagemBuilder.prototype), "elemento", this).seq;
             var label = _get(ListagemBuilder.prototype.__proto__ || Object.getPrototypeOf(ListagemBuilder.prototype), "elemento", this).label;
 
+            var idBuild = _get(ListagemBuilder.prototype.__proto__ || Object.getPrototypeOf(ListagemBuilder.prototype), "getId", this).call(this, id, this._dadosIndexado);
             var idBtnNovo = "btnNovo-" + id;
             var btnNovoItem = "";
             if (!readOnly) {
-                btnNovoItem = "<a class='btn btn-xs' id='" + idBtnNovo + "'><i class='fa fa-plus'></i> Novo</a>";
+                btnNovoItem = "<a class='btn btn-xs btn-novo-item' data-id-listagem='" + idBuild + "' id='" + idBtnNovo + "'><i class='fa fa-plus'></i> Novo</a>";
             }
 
-            var html = "\n            <div class='clearfix nivel1 agragador listagem' id='" + id + "' data-seq='" + seq + "' data-label='" + label + "'>\n            \t<h3 class='titulo-agregador clearfix'>\n            \t\t<a data-id='" + id + "' class='link-agregador' id='link-" + id + "'><i class='fa fa-bars'></i>" + label + "</a>\n                    " + btnNovoItem + "\n            \t</h3>\n                <div class='container-sortable' id='container-" + id + "'>\n                    " + this.buildListaContainerItens(totalItens) + "\n            \t</div>\n            </div>            \n        ";
+            var html = "\n            <div class='clearfix nivel1 agragador listagem' data-id='" + id + "' id='" + idBuild + "' data-seq='" + seq + "' data-label='" + label + "'>\n            \t<h3 class='titulo-agregador clearfix'>\n            \t\t<a data-id='" + id + "' class='link-agregador'><i class='fa fa-bars'></i>" + label + "</a>\n                    " + btnNovoItem + "\n            \t</h3>\n                <div class='container-sortable' id='container-" + idBuild + "'>\n                    " + this.buildListaContainerItens(totalItens) + "\n            \t</div>\n            </div>            \n        ";
 
             return {
+                idListagem: idBuild,
                 idBotaoNovo: idBtnNovo,
                 html: html
             };
@@ -60,19 +66,18 @@ var ListagemBuilder = exports.ListagemBuilder = function (_Builder) {
     }, {
         key: "buildContainerItem",
         value: function buildContainerItem(indice) {
-            return "\n            <div class=\"wrap-item\" id=\"wrap-item-" + _get(ListagemBuilder.prototype.__proto__ || Object.getPrototypeOf(ListagemBuilder.prototype), "elemento", this).id + "-" + indice + "\" >\n                <div class=\"row cinza campo\" style=\"border-bottom:1px solid #dcdbdb\">\n                    <div class=\"col-md-12\">\n                        #" + (indice + 1) + "\n                    </div>\n                </div>\n                <div class=\"wrap-componentes\" id=\"wrap-componentes-" + _get(ListagemBuilder.prototype.__proto__ || Object.getPrototypeOf(ListagemBuilder.prototype), "elemento", this).id + "-" + indice + "\"></div>                    \n            </div>";
+            var botaoDelete = "<a class=\"btn btn-danger btn-xs btn-outline\" id=\"" + this.buildId('btnDelete') + "\">Excluir</a>";
+            return "\n            <div class=\"wrap-item\" id=\"" + this.buildWrapItemId(indice) + "\">\n                <div class=\"row cinza campo header-item\">\n                    <div class=\"col-xs-6 indice-item\">#" + (indice + 1) + "</div>                        \n                    <div class=\"col-xs-6\" style=\"text-align:right\">\n                        " + botaoDelete + " \n                    </div>\n                </div>                \n            </div>";
         }
     }, {
-        key: "buildBotaoDelete",
-        value: function buildBotaoDelete(indice) {
-            var idBtnDelete = "btnDelete-" + _get(ListagemBuilder.prototype.__proto__ || Object.getPrototypeOf(ListagemBuilder.prototype), "elemento", this).id + "-" + indice;
-            var html = "\n            <div class=\"row cinza campo\">\n                <div class=\"col-md-12\" style=\"text-align:right\">\n                    <a class=\"btn btn-danger btn-xs\" id=\"" + idBtnDelete + "\">Excluir</a>\n                </div>\n            </div>";
-
-            return {
-                html: html,
-                idBotaoDelete: idBtnDelete,
-                indice: indice
-            };
+        key: "buildWrapItemId",
+        value: function buildWrapItemId(indice) {
+            return this.buildId('wrapitem') + "-" + indice;
+        }
+    }, {
+        key: "buildId",
+        value: function buildId(prefixo) {
+            return prefixo + "-" + this.getId(_get(ListagemBuilder.prototype.__proto__ || Object.getPrototypeOf(ListagemBuilder.prototype), "elemento", this).id, this._dadosIndexado);
         }
     }]);
 

@@ -12,12 +12,8 @@ export class Builder {
         return this._elemento.obrigatorio ? "required" : "";
     }
     
-    getIdHtml(idElemento, dadosItmIndexado){
-        var retornoId = `id='${idElemento}'`;
-		if (dadosItmIndexado){
-            retornoId = `id='${idElemento}-${dadosItmIndexado.posicaoIndice}-${dadosItmIndexado.idListagem}'`;
-		}
-		return retornoId;
+    getIdHtml(idElemento, dadosIndexado){
+        return `id="${this.getId(idElemento, dadosIndexado)}"`;
     }
     
     getReadOnlyHtml(readOnly){
@@ -38,6 +34,16 @@ export class Builder {
     
     get elemento(){
         return this._elemento;
+    }
+    
+    getId(idElemento, dadosIndexado){  
+        let arr = [];
+        if (dadosIndexado.idPai){
+            arr.push(dadosIndexado.idPai);
+        }
+        arr.push(dadosIndexado.indice);
+        arr.push(idElemento);        
+        return arr.join("-");
     }
     
     

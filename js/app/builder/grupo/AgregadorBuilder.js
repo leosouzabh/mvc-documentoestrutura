@@ -28,19 +28,20 @@ var AgregadorBuilder = exports.AgregadorBuilder = function (_Builder) {
 
     _createClass(AgregadorBuilder, [{
         key: 'build',
-        value: function build(dadosItmIndexado) {
+        value: function build(dadosIndexado) {
             var id = _get(AgregadorBuilder.prototype.__proto__ || Object.getPrototypeOf(AgregadorBuilder.prototype), 'elemento', this).id;
             var seq = _get(AgregadorBuilder.prototype.__proto__ || Object.getPrototypeOf(AgregadorBuilder.prototype), 'elemento', this).seq;
             var label = _get(AgregadorBuilder.prototype.__proto__ || Object.getPrototypeOf(AgregadorBuilder.prototype), 'elemento', this).label;
 
-            var idx = dadosItmIndexado ? dadosItmIndexado.posicaoIndice + '-' + id : '-' + id;
-            var idContainerItens = 'container-' + idx;
+            var idBuild = _get(AgregadorBuilder.prototype.__proto__ || Object.getPrototypeOf(AgregadorBuilder.prototype), 'getId', this).call(this, id, dadosIndexado);
+            var idContainerItens = 'container-' + idBuild;
 
-            var html = '\n            <div class=\'clearfix nivel1 agragador\' id=\'' + id + '\' data-seq=\'' + seq + '\' data-label=\'' + label + '\'>\n                <h3 class=\'titulo-agregador clearfix\'>\n                    <a data-id=\'' + id + '\' class=\'link-agregador\' id=\'link-' + id + '\'>' + label + '</a>\n                </h3>\n                <div class=\'container-sortable\' id=\'' + idContainerItens + '\'></div\n            </div>\n        ';
+            var html = '\n            <div class=\'clearfix nivel1 agragador\' id=\'' + idBuild + '\' data-id=\'' + id + '\' data-seq=\'' + seq + '\' data-label=\'' + label + '\'>\n                <h3 class=\'titulo-agregador clearfix\'>\n                    <a data-id=\'' + id + '\' class=\'link-agregador\' id=\'link-' + id + '\'>' + label + '</a>\n                </h3>\n                <div class=\'container-sortable\' id=\'' + idContainerItens + '\'></div\n            </div>\n        ';
 
             return {
                 idContainerItens: idContainerItens,
-                html: html
+                html: html,
+                idBuild: idBuild
             };
         }
     }]);

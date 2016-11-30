@@ -16,6 +16,10 @@ var _WriterService = require('../service/WriterService');
 
 var _RenderService = require('../service/RenderService');
 
+var _NovoItemService = require('../service/NovoItemService');
+
+var _GeraJsonService = require('../service/GeraJsonService');
+
 var _Elemento = require('../constantes/Elemento');
 
 var _JsonUtil = require('../util/JsonUtil');
@@ -36,114 +40,54 @@ var DocEstrutura = function () {
             this._readOnlyFields = readOnlyFields;
 
             $("#container-form").empty();
-            this._renderAgregador('container-form', this._objEstrutura);
+            this._renderAgregador('container-form', this._objEstrutura, this._newDadosIndexado(null, 0));
+        }
+    }, {
+        key: 'montaJson',
+        value: function montaJson() {
+            new _GeraJsonService.GeraJsonService().geraJson();
         }
     }, {
         key: '_renderAgregador',
-        value: function _renderAgregador(idContainer, agregador, dadosItmIndexado) {
+        value: function _renderAgregador(idContainer, agregador, dadosIndexado) {
             var write = new _WriterService.WriterService(idContainer);
-            var agregadorView = new _AgregadorBuilder.AgregadorBuilder(agregador).build(dadosItmIndexado);
-
+            var agregadorView = new _AgregadorBuilder.AgregadorBuilder(agregador).build(dadosIndexado);
             write.wr(agregadorView.html);
-            this._renderItens(agregadorView.idContainerItens, agregador.itens, dadosItmIndexado);
+
+            dadosIndexado.idPai = agregadorView.idBuild;
+            this._renderItens(agregadorView.idContainerItens, agregador.itens, dadosIndexado);
         }
     }, {
         key: '_renderListagem',
-        value: function _renderListagem(idContainer, listagem, dadosItmIndexado) {
-            var _this = this;
-
+        value: function _renderListagem(idContainer, listagem, dadosIndexado) {
             var write = new _WriterService.WriterService(idContainer);
-            var totalItens = this._getTotalItensListagem(listagem.id);
-            var builder = new _ListagemBuilder.ListagemBuilder(listagem);
+            var builder = new _ListagemBuilder.ListagemBuilder(listagem, dadosIndexado);
 
-            var listagemView = builder.build(this._readOnlyFields, totalItens, dadosItmIndexado);
-            write.wr(listagemView.html, function () {
-                $('#' + listagemView.idBotaoNovo).on('click', function (evt) {
-                    _this.adicionaItemLista(listagem.id);
-                });
-            });
+            var idBuild = builder.getId(listagem.id, dadosIndexado);
+            var totalItens = this._getTotalItensListagem(idBuild);
 
-            var _loop = function _loop() {
-                var idItemCorrente = 'wrap-componentes-' + listagem.id + '-' + idxEl;
-                _this._renderItens(idItemCorrente, listagem.itens, _this._montaDadosItmIndexado(listagem.id, idxEl));
+            var listagemView = builder.build(this._readOnlyFields, totalItens, dadosIndexado);
+            write.wr(listagemView.html);
 
-                var idWrapCorrente = 'wrap-item-' + listagem.id + '-' + idxEl;
-                var botaoDeleteView = builder.buildBotaoDelete(idxEl);
-
-                new _WriterService.WriterService(idWrapCorrente).wr(botaoDeleteView.html, function () {
-                    $('#' + botaoDeleteView.idBotaoDelete).on('click', function (evt) {
-                        return _this.removerItens(listagem.id, botaoDeleteView.indice);
-                    });
-                });
-            };
+            this._bindEvents();
 
             for (var idxEl = 0; idxEl < totalItens; idxEl++) {
-                _loop();
+                var idWrapItem = builder.buildWrapItemId(idxEl);
+                this._renderItens(idWrapItem, listagem.itens, this._newDadosIndexado(listagemView.idListagem, idxEl));
             }
         }
     }, {
-        key: '_montaDadosItmIndexado',
-        value: function _montaDadosItmIndexado(idListagem, idxEl) {
-            return { idListagem: idListagem, posicaoIndice: idxEl };
-        }
-    }, {
-        key: 'adicionaItemLista',
-        value: function adicionaItemLista(idListagem) {
-            var _this2 = this;
-
-            var indiceNovoElemento = this._getProximoSequencial(idListagem);
-            var listagem = _JsonUtil.JsonUtil.findListagem(this._objEstrutura, idListagem);
-            var builder = new _ListagemBuilder.ListagemBuilder(listagem);
-
-            new _WriterService.WriterService('container-' + idListagem).wr(builder.buildContainerItem(indiceNovoElemento));
-
-            var idItemCorrente = 'wrap-componentes-' + idListagem + '-' + indiceNovoElemento;
-            this._renderItens(idItemCorrente, listagem.itens, this._montaDadosItmIndexado(listagem.id, indiceNovoElemento));
-
-            var idWrapCorrente = 'wrap-item-' + listagem.id + '-' + indiceNovoElemento;
-            var botaoDeleteView = builder.buildBotaoDelete(indiceNovoElemento);
-
-            new _WriterService.WriterService(idWrapCorrente).wr(botaoDeleteView.html, function () {
-                $('#' + botaoDeleteView.idBotaoDelete).on('click', function (evt) {
-                    return _this2.removerItens(listagem.id, botaoDeleteView.indice);
-                });
-            });
-        }
-    }, {
-        key: 'removerItens',
-        value: function removerItens(idListagem, indice) {
-            var idContainer = "wrap-item-" + idListagem + "-" + indice;
-            var totalItens = this._mapaListagemTotalElementos.get(idListagem);
-            this._mapaListagemTotalElementos.set(idListagem, totalItens - 1);
-
-            $("#" + idContainer).remove();
-            this.reorganizaIndiceIdsListagem(idListagem);
-        }
-    }, {
-        key: 'reorganizaIndiceIdsListagem',
-        value: function reorganizaIndiceIdsListagem(idListagem) {
-            $.each($("#container-" + idListagem).children(), function (i, item) {
-                $.each($(item).find(".form-control"), function (i2, input) {
-                    var arr = $(input).attr('id').split("-");
-                    arr[1] = i;
-                    $(input).attr('id', arr.join('-'));
-                });
-            });
-        }
-    }, {
         key: '_renderItens',
-        value: function _renderItens(idContainer, listaItens, dadosItmIndexado) {
-            var _this3 = this;
-
-            console.log(idContainer);
+        value: function _renderItens(idContainer, listaItens, dadosIndexado) {
+            var _this = this;
 
             listaItens.forEach(function (item) {
                 if (item.tipo == _Elemento.Elemento.tipo.AGREGADOR) {
-                    _this3._renderAgregador(idContainer, item, dadosItmIndexado);
+                    _this._renderAgregador(idContainer, item, dadosIndexado);
                 } else if (item.tipo == _Elemento.Elemento.tipo.LISTAGEM) {
-                    _this3._renderListagem(idContainer, item, dadosItmIndexado);
+                    _this._renderListagem(idContainer, item, dadosIndexado);
                 } else {
-                    var htmlRender = new _RenderService.RenderService(item, _this3._readOnlyFields, dadosItmIndexado, new _WriterService.WriterService(idContainer));
+                    var htmlRender = new _RenderService.RenderService(item, _this._readOnlyFields, dadosIndexado, new _WriterService.WriterService(idContainer));
 
                     switch (item.tipo) {
                         case _Elemento.Elemento.tipo.TEXTO:
@@ -173,6 +117,40 @@ var DocEstrutura = function () {
             });
         }
     }, {
+        key: '_newDadosIndexado',
+        value: function _newDadosIndexado(idPai, indice) {
+            return { idPai: idPai, indice: indice };
+        }
+    }, {
+        key: 'adicionaItemLista',
+        value: function adicionaItemLista(botao) {
+            var idBuild = $(botao.target).data('id-listagem');
+            var novoItemService = new _NovoItemService.NovoItemService(idBuild);
+            novoItemService.geraNovoItem();
+            this._bindEvents();
+        }
+    }, {
+        key: 'removerItens',
+        value: function removerItens(idListagem, indice) {
+            var idContainer = "wrap-item-" + idListagem + "-" + indice;
+            var totalItens = this._mapaListagemTotalElementos.get(idListagem);
+            this._mapaListagemTotalElementos.set(idListagem, totalItens - 1);
+
+            $("#" + idContainer).remove();
+            this.reorganizaIndiceIdsListagem(idListagem);
+        }
+    }, {
+        key: 'reorganizaIndiceIdsListagem',
+        value: function reorganizaIndiceIdsListagem(idListagem) {
+            $.each($("#container-" + idListagem).children(), function (i, item) {
+                $.each($(item).find(".form-control"), function (i2, input) {
+                    var arr = $(input).attr('id').split("-");
+                    arr[1] = i;
+                    $(input).attr('id', arr.join('-'));
+                });
+            });
+        }
+    }, {
         key: '_getTotalItensListagem',
         value: function _getTotalItensListagem(idListagem) {
             if (this._mapaListagemTotalElementos.get(idListagem) == null) {
@@ -186,6 +164,21 @@ var DocEstrutura = function () {
             var indiceNovoElemento = this._mapaListagemTotalElementos.get(idListagem);
             this._mapaListagemTotalElementos.set(idListagem, indiceNovoElemento + 1);
             return indiceNovoElemento;
+        }
+    }, {
+        key: '_bindEvents',
+        value: function _bindEvents() {
+            var _this2 = this;
+
+            $('.btn-novo-item').off('click');
+            $('.btn-novo-item').on('click', function (evt) {
+                return _this2.adicionaItemLista(evt);
+            });
+
+            $('.btn-delete-item').off('click');
+            $('.btn-delete-item').on('click', function (evt) {
+                return _this2.removerItens(evt);
+            });
         }
     }]);
 

@@ -16956,3 +16956,8 @@ div.placeholder-right{
 .wrap-item .agragador {
 	margin:0em 1em 1em 1em !important;
 }
+
+.header-item{
+    border-bottom:  1px solid #dcdbdb;
+    padding-bottom: 5px;
+}

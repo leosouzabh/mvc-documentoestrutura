@@ -28,12 +28,12 @@ var TextoBuilder = exports.TextoBuilder = function (_Builder) {
 
     _createClass(TextoBuilder, [{
         key: 'build',
-        value: function build(readOnly, dadosItmIndexado) {
+        value: function build(readOnly, dadosIndexado) {
             var id = _get(TextoBuilder.prototype.__proto__ || Object.getPrototypeOf(TextoBuilder.prototype), 'elemento', this).id;
             var seq = _get(TextoBuilder.prototype.__proto__ || Object.getPrototypeOf(TextoBuilder.prototype), 'elemento', this).seq;
             var label = _get(TextoBuilder.prototype.__proto__ || Object.getPrototypeOf(TextoBuilder.prototype), 'elemento', this).label;
 
-            var html = '            \n\t\t<div class=\'row cinza campo\' data-label=\'' + label + '\' data-seq=\'' + seq + '\'>\n\t\t\t<div class=\'col-md-4\' id=\'label-texto-' + id + '\'> ' + label + ' ' + _get(TextoBuilder.prototype.__proto__ || Object.getPrototypeOf(TextoBuilder.prototype), 'tagObrigatorioLabel', this).call(this) + '</div>\n\t\t\t<div class=\'col-md-8\'>\n\t\t\t\t<input type=\'text\'\n                    class=\'form-control\'\n                    ' + _get(TextoBuilder.prototype.__proto__ || Object.getPrototypeOf(TextoBuilder.prototype), 'tagObrigatorioInput', this).call(this) + '\n                    ' + _get(TextoBuilder.prototype.__proto__ || Object.getPrototypeOf(TextoBuilder.prototype), 'getReadOnlyHtml', this).call(this, readOnly) + '\n                    ' + _get(TextoBuilder.prototype.__proto__ || Object.getPrototypeOf(TextoBuilder.prototype), 'getIdHtml', this).call(this, id, dadosItmIndexado) + '" />\t\t\n\t\t\t</div>\n\t\t</div>\n        ';
+            var html = '            \n\t\t<div class=\'row cinza campo\' data-id="' + id + '" data-label=\'' + label + '\' data-seq=\'' + seq + '\'>\n\t\t\t<div class=\'col-md-4\'> ' + label + ' ' + _get(TextoBuilder.prototype.__proto__ || Object.getPrototypeOf(TextoBuilder.prototype), 'tagObrigatorioLabel', this).call(this) + '</div>\n\t\t\t<div class=\'col-md-8\'>\n\t\t\t\t<input type=\'text\'\n                    class=\'form-control\'\n                    ' + _get(TextoBuilder.prototype.__proto__ || Object.getPrototypeOf(TextoBuilder.prototype), 'tagObrigatorioInput', this).call(this) + '\n                    ' + _get(TextoBuilder.prototype.__proto__ || Object.getPrototypeOf(TextoBuilder.prototype), 'getReadOnlyHtml', this).call(this, readOnly) + '\n                    ' + _get(TextoBuilder.prototype.__proto__ || Object.getPrototypeOf(TextoBuilder.prototype), 'getIdHtml', this).call(this, id, dadosIndexado) + ' />\t\t\n\t\t\t</div>\n\t\t</div>\n        ';
 
             return {
                 html: html

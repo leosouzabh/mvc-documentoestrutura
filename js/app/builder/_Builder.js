@@ -27,12 +27,8 @@ var Builder = exports.Builder = function () {
         }
     }, {
         key: "getIdHtml",
-        value: function getIdHtml(idElemento, dadosItmIndexado) {
-            var retornoId = "id='" + idElemento + "'";
-            if (dadosItmIndexado) {
-                retornoId = "id='" + idElemento + "-" + dadosItmIndexado.posicaoIndice + "-" + dadosItmIndexado.idListagem + "'";
-            }
-            return retornoId;
+        value: function getIdHtml(idElemento, dadosIndexado) {
+            return "id=\"" + this.getId(idElemento, dadosIndexado) + "\"";
         }
     }, {
         key: "getReadOnlyHtml",
@@ -51,6 +47,17 @@ var Builder = exports.Builder = function () {
                 propDisabled = "disabled='disabled'";
             }
             return propDisabled;
+        }
+    }, {
+        key: "getId",
+        value: function getId(idElemento, dadosIndexado) {
+            var arr = [];
+            if (dadosIndexado.idPai) {
+                arr.push(dadosIndexado.idPai);
+            }
+            arr.push(dadosIndexado.indice);
+            arr.push(idElemento);
+            return arr.join("-");
         }
     }, {
         key: "elemento",

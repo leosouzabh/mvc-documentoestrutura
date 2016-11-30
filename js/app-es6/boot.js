@@ -9,38 +9,92 @@ var json = `
     "seq": 0,
     "tipo": "agregador",
     "itens": [{
-        "label": "Campo Texto",
-        "id": "texto3",
-        "chave": "texto3",
-        "seq": 3,
+        "label": "NOME",
+        "id": "texto1",
+        "chave": "texto1",
+        "seq": 1,
         "obrigatorio": false,
         "regex": "",
         "tipo": "texto"
     }, {
-        "label": "LISTAGEM",
-        "id": "listagem1",
-        "chave": "listagem1",
-        "seq": 1,
-        "tipo": "listagem",
+        "label": "IDADE",
+        "id": "numero2",
+        "chave": "numero2",
+        "obrigatorio": false,
+        "regex": "",
+        "tipo": "numero"
+    }, {
+        "label": "ENDEREÇO",
+        "id": "agregador3",
+        "chave": "agregador3",
+        "seq": 3,
+        "tipo": "agregador",
         "itens": [{
-            "label": "Campo Texto",
-            "id": "texto2",
-            "chave": "texto2",
-            "seq": 2,
+            "label": "LOG",
+            "id": "texto4",
+            "chave": "texto4",
+            "seq": 4,
             "obrigatorio": false,
             "regex": "",
             "tipo": "texto"
         }, {
-            "label": "LISTAGEM",
-            "id": "listagem4",
-            "chave": "listagem4",
-            "seq": 4,
-            "tipo": "listagem",
+            "label": "BAIRRO",
+            "id": "texto5",
+            "chave": "texto5",
+            "seq": 5,
+            "obrigatorio": false,
+            "regex": "",
+            "tipo": "texto"
+        }]
+    }, {
+        "label": "LISTAGEM",
+        "id": "listagem6",
+        "chave": "listagem6",
+        "seq": 6,
+        "tipo": "listagem",
+        "itens": [{
+            "label": "NOME",
+            "id": "texto7",
+            "chave": "texto7",
+            "seq": 7,
+            "obrigatorio": false,
+            "regex": "",
+            "tipo": "texto"
+        }, {
+            "label": "CPF",
+            "id": "texto8",
+            "chave": "texto8",
+            "seq": 8,
+            "obrigatorio": false,
+            "regex": "",
+            "tipo": "texto"
+        }, {
+            "label": "CONCURSADO",
+            "id": "lista10",
+            "chave": "lista10",
+            "obrigatorio": false,
+            "tipo": "lista",
+            "seq": 10,
+            "opcoes": ["Sim", "Não", "Sim", "Não"]
+        }, {
+            "label": "NOME DO GRUPO",
+            "id": "agregador11",
+            "chave": "agregador11",
+            "seq": 11,
+            "tipo": "agregador",
             "itens": [{
-                "label": "Campo Texto",
-                "id": "texto5",
-                "chave": "texto5",
-                "seq": 5,
+                "label": "CTPS",
+                "id": "texto12",
+                "chave": "texto12",
+                "seq": 12,
+                "obrigatorio": false,
+                "regex": "",
+                "tipo": "texto"
+            }, {
+                "label": "PIS",
+                "id": "texto13",
+                "chave": "texto13",
+                "seq": 13,
                 "obrigatorio": false,
                 "regex": "",
                 "tipo": "texto"
@@ -51,3 +105,6 @@ var json = `
 `;
 
 currentInstance().iniciaConstrucao(json, false);
+$("#btn-parse").on('click', function(){
+    currentInstance().montaJson();
+})

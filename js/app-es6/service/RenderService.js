@@ -7,10 +7,10 @@ import {MoedaBuilder}  from '../builder/html/MoedaBuilder';
 
 export class RenderService {
     
-    constructor(item, readOnlyFields, dadosItmIndexado, writeService){
+    constructor(item, readOnlyFields, dadosIndexado, writeService){
         this._write = writeService;
         this._readOnlyFields = readOnlyFields;
-        this._dadosItmIndexado = dadosItmIndexado;
+        this._dadosIndexado = dadosIndexado;
         this._item = item;            
     }
     
@@ -31,7 +31,7 @@ export class RenderService {
     }     
         
     _doRender(builder){
-        return builder.build(this._readOnlyFields, this._dadosItmIndexado)
+        return builder.build(this._readOnlyFields, this._dadosIndexado)
     }
 
 }

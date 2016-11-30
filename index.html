@@ -5,27 +5,26 @@
     <title>Negociações</title>
     <link rel="stylesheet" href="css/application.css">
     <script src="lib/application.js"></script>
+    <script src="lib/jsonpath-0.8.0.js"></script>
     
     
 </head>
 <body style="background-color:#FFF">
     
     
+    <button id="btn-parse">Parsear</button>
     <div style="background-color:#f8f8f8;" id="container-form"></div>
+    
     
     
     <script src="node_modules/systemjs/dist/system.js"></script>
     <script>
-        System.defaultJSExtensions = true; // permite omitir a extensão .js dos imports
-        System.import('js/app/boot').catch(function(err){ 
-            console.error(err);
-        });
+            System.defaultJSExtensions = true; // permite omitir a extensão .js dos imports
+            System.import('js/app/boot').catch(function(err){ 
+                console.error(err);
+            });
     </script>
-    
-    
-    
-    
-    
+        
     
 </body>
 </html>
